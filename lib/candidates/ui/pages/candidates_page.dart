@@ -24,7 +24,6 @@ class CandidatesPage extends StatefulWidget {
 }
 
 class _CandidatesPageState extends State<CandidatesPage> {
-
   bool conection = true;
 
   CandidatesController controller =
@@ -34,14 +33,12 @@ class _CandidatesPageState extends State<CandidatesPage> {
   void initState() {
     super.initState();
 
-
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.white, // Cambia el color aquí
         statusBarIconBrightness: Brightness.dark,
       ),
     );
-
 
     verificateConection();
 
@@ -51,12 +48,12 @@ class _CandidatesPageState extends State<CandidatesPage> {
       _updateConnectionStatus(result);
     });
 
-
-    controller.getCandidates();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.getCandidates();
+    });
   }
 
-
-    void verificateConection() async {
+  void verificateConection() async {
     conection = await checkConnectivity();
 
     if (conection) {
@@ -167,7 +164,6 @@ class _CandidatesPageState extends State<CandidatesPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -214,16 +210,16 @@ class _CandidatesPageState extends State<CandidatesPage> {
             child: Column(
               children: [
                 Image.asset(
-                          'lib/assets/unidos.png',
-                          width: 200,
-                          height: 150,
-                      ),  
+                  'lib/assets/unidos.png',
+                  width: 200,
+                  height: 150,
+                ),
                 SingleChildScrollView(
                   child: Column(
                     children: [
                       //const SizedBox(height: 20),
-                      //const SizedBox(height: 20), 
-                    
+                      //const SizedBox(height: 20),
+
                       Column(
                         children: List<Widget>.from(
                           controller.candidates.map(
