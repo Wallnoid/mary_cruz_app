@@ -54,7 +54,7 @@ class _SurveyPageState extends State<SurveyPage> {
 
     Navigator.of(context).pop();
     if (respond) {
-      Get.offNamed('/');
+      Get.offNamed('/candidates');
 
       return;
     }

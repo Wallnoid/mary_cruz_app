@@ -109,6 +109,8 @@ class _FilterDialogState extends State<FilterDialog> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+               
+
                   ..._candidatos
                       .take(_showAllCandidatos ? _candidatos.length : 5)
                       .map((candida) => CheckboxListTile(

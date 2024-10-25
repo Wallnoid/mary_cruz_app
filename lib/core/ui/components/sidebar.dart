@@ -99,7 +99,7 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
                   children: <Widget>[
                     InkWell(
                       onTap: () {
-                        Get.offNamed("/");
+                        Get.offNamed("/candidates");
                       },
                       splashColor: Colors.transparent,
                       child: SizedBox(
@@ -129,7 +129,7 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
                       isSelected: selectIndex == SideBar.candidates,
                       isVisible:
                           controller.listSidebarOptions[1].isVisible ?? false,
-                      onTap: () => Get.offNamed("/"),//Get.offNamed("candidates"),
+                      onTap: () => Get.offNamed("candidates"),//Get.offNamed("candidates"),
                     ),
                     RowSidebar(
                       title: controller.listSidebarOptions[0].title ?? '',

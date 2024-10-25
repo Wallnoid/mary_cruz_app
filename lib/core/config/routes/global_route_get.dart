@@ -18,7 +18,7 @@ class GlobalRouteGet {
 
   static final List<GetPage> routes = [
     GetPage(
-        name: '/', // '/candidates',
+        name: '/candidates', // '/candidates',
         page: () => const CandidatesPage(),
         children: [
           GetPage(

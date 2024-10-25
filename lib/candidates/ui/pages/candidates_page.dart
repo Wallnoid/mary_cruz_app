@@ -211,22 +211,32 @@ class _CandidatesPageState extends State<CandidatesPage> {
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: Center(
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
-                  const SizedBox(height: 20),
-                  Column(
-                    children: List<Widget>.from(
-                      controller.candidates.map(
-                        (x) => CandidateCard(
-                          candidate: x,
+            child: Column(
+              children: [
+                Image.asset(
+                          'lib/assets/unidos.png',
+                          width: 200,
+                          height: 150,
+                      ),  
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      //const SizedBox(height: 20),
+                      //const SizedBox(height: 20), 
+                    
+                      Column(
+                        children: List<Widget>.from(
+                          controller.candidates.map(
+                            (x) => CandidateCard(
+                              candidate: x,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

@@ -300,7 +300,7 @@ class _GameState extends State<Game> {
                 onPressed: () {
                   // Navigator.of(context).pop();
                   //Navigator.pushNamed(context, 'home');
-                  Navigator.pushNamed(context, '/');
+                  Navigator.pushNamed(context, '/candidates');
                 },
               )
             ],

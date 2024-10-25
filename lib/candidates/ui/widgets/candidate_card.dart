@@ -39,7 +39,9 @@ class _CandidateCardState extends State<CandidateCard> {
         onTap: () {
           controller.setCandidate(candidate);
 
+          //Get.toNamed('/candidates/candidate-description');
           Get.toNamed('/candidates/candidate-description');
+
         },
         splashColor: Colors.grey,
         child: Row(children: [
