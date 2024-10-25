@@ -403,7 +403,7 @@ class OpinionsPageState extends State<OpinionsPage> {
               Column(
                 children: [
                   Text(
-                      'Desea registrar su correo electronico para recibir noticias y temas de su interes? ',
+                      'Desea registrar su correo electrónico para recibir noticias y temas de su interés? ',
                       style: Theme.of(context).textTheme.bodyMedium),
                   Row(
                     children: [
