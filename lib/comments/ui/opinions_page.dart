@@ -112,7 +112,7 @@ class OpinionsPageState extends State<OpinionsPage> {
       personTypeError = personTypeController.text.isEmpty
           ? 'Tipo de persona es requerido'
           : null;
-      genreError = genreController.text.isEmpty ? 'Genero es requerido' : null;
+      genreError = genreController.text.isEmpty ? 'Género es requerido' : null;
       ageError = ageController.text.isEmpty
           ? 'Edad es requerida'
           : !RegExp(r'^(1[6-9]|[2-7][0-9]|80)$').hasMatch(ageController.text)
@@ -303,7 +303,7 @@ class OpinionsPageState extends State<OpinionsPage> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 5),
-              Text('Intentelo más tarde.')
+              Text('Inténtelo más tarde.')
             ],
           ),
         ),
@@ -355,7 +355,7 @@ class OpinionsPageState extends State<OpinionsPage> {
                 children: [
                   Expanded(
                     child: Dropdown(
-                      label: 'Genero',
+                      label: 'Género',
                       getData: genreData,
                       value: 'M',
                       height: 50.0,

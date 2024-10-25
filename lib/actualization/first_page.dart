@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mary_cruz_app/candidates/ui/pages/candidates_page.dart';
 //import 'package:launch_review/launch_review.dart';
 import 'package:mary_cruz_app/core/global_controllers/config_controller.dart';
 import 'package:mary_cruz_app/home/ui/pages/home_page.dart';
@@ -80,7 +81,7 @@ class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
     
-    return  const HomePage(); // Renderiza el HomePage sin lógica de verificación en el build
+    return  const CandidatesPage(); //HomePage(); // Renderiza el HomePage sin lógica de verificación en el build
   }
 }
 

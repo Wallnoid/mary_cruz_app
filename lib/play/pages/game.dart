@@ -290,7 +290,8 @@ class _GameState extends State<Game> {
                 child:  Text('Regresar a pantalla principal', style: TextStyle(fontSize: ScreenUtil().setSp(14)),),
                 onPressed: () {
                   // Navigator.of(context).pop();
-                  Navigator.pushNamed(context, 'home');
+                  //Navigator.pushNamed(context, 'home');
+                  Navigator.pushNamed(context, '/');
                 },
               )
             ],

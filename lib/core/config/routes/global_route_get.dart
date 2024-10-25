@@ -18,9 +18,7 @@ class GlobalRouteGet {
 
   static final List<GetPage> routes = [
     GetPage(
-        name: '/', page: () => const HomePage(), transition: Transition.fadeIn),
-    GetPage(
-        name: '/candidates',
+        name: '/', // '/candidates',
         page: () => const CandidatesPage(),
         children: [
           GetPage(
@@ -29,6 +27,8 @@ class GlobalRouteGet {
               transition: Transition.fadeIn),
         ],
         transition: Transition.fadeIn),
+    GetPage(
+        name: '/agenda', page: () => const HomePage(), transition: Transition.fadeIn),
     GetPage(
         name: '/actualization',
         page: () => const FirstPage(),

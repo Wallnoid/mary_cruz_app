@@ -165,10 +165,10 @@ class _HomePageState extends State<HomePage> {
       if (!diaryController.isLoading.value && diaryController.error.value) {
         return const Scaffold(
           appBar: CustomAppbar(
-            title: 'Home',
+            title: 'Agenda'//'Home',
           ),
           drawer: GlobalSidebar(
-            selectedIndex: SideBar.home,
+            selectedIndex: SideBar.agenda//SideBar.home,
           ),
           body: Center(
             child: Column(
@@ -185,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 5),
-                Text('Intentelo más tarde.')
+                Text('Inténtelo más tarde.')
               ],
             ),
           ),
@@ -199,10 +199,10 @@ class _HomePageState extends State<HomePage> {
         child: SafeArea(
           child: Scaffold(
               appBar: const CustomAppbar(
-                title: 'Home',
+                title: "Agenda", /*'Home',*/
               ),
               drawer: const GlobalSidebar(
-                selectedIndex: SideBar.home,
+                selectedIndex: SideBar.agenda //SideBar.home,
               ),
               body: Padding(
                 padding: const EdgeInsets.only(

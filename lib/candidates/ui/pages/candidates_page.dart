@@ -51,7 +51,7 @@ class _CandidatesPageState extends State<CandidatesPage> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 5),
-                Text('Intentelo más tarde.')
+                Text('Inténtelo más tarde.')
               ],
             ),
           ),

@@ -112,21 +112,22 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
                     const SizedBox(
                       height: 10,
                     ),
-                    RowSidebar(
-                      title: controller.listSidebarOptions[0].title ?? '',
-                      icon: Icons.home_outlined,
-                      isSelected: selectIndex == SideBar.home,
-                      isVisible:
-                          controller.listSidebarOptions[0].isVisible ?? false,
-                      onTap: () => Get.offNamed("/"),
-                    ),
+                    
                     RowSidebar(
                       title: controller.listSidebarOptions[1].title ?? '',
                       icon: Icons.people_alt_outlined,
                       isSelected: selectIndex == SideBar.candidates,
                       isVisible:
                           controller.listSidebarOptions[1].isVisible ?? false,
-                      onTap: () => Get.offNamed("candidates"),
+                      onTap: () => Get.offNamed("/"),//Get.offNamed("candidates"),
+                    ),
+                    RowSidebar(
+                      title: controller.listSidebarOptions[0].title ?? '',
+                      icon: Icons.border_color_rounded,
+                      isSelected: selectIndex == SideBar.agenda, //SideBar.home,
+                      isVisible:
+                          controller.listSidebarOptions[0].isVisible ?? false,
+                      onTap: () => Get.offNamed("agenda"), //Get.offNamed("/"),
                     ),
                     RowSidebar(
                       title: controller.listSidebarOptions[2].title ?? '',
@@ -266,9 +267,33 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
                             ],
                           ),
                         )
+                        , 
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        
                       ],
                     ),
                   )),
+
+                   Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    color: Theme.of(context).colorScheme.surface,
+                    child:  Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                          Text( 
+                        "versión 0.0.1", // cambiar en iphone
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold),
+                          ),
+
+                         ],),
+                  ),),
             ],
           ),
         );
