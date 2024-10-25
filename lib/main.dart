@@ -31,6 +31,8 @@ Future<void> main() async {
     ),
   );
 
+
+
   if (isConnected) {
     // Internet is available, initialize Firebase
     //firebase

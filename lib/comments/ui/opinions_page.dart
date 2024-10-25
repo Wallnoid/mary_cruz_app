@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mary_cruz_app/comments/ui/widgets/age_custom_text_field.dart';
 import 'package:mary_cruz_app/comments/ui/widgets/loading_dialog/loading_dialog.dart';
@@ -75,6 +76,15 @@ class OpinionsPageState extends State<OpinionsPage> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white, // Cambia el color aquí
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+
+
     getFacultyData();
     if (facultyData.isNotEmpty) {
       facultyController.text = facultyData[0].value;

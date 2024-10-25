@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mary_cruz_app/core/models/question_model.dart';
 import 'package:mary_cruz_app/core/models/response_model.dart';
 
@@ -28,6 +29,15 @@ class _SurveyItemState extends State<SurveyItem> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white, // Cambia el color aquí
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+
+
     print("${widget.question.title}  $isSelected");
     selectedOption = isSelected(widget.question.id);
 

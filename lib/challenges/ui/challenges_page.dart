@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart'; // Importa para inicializar la localización
 import 'package:mary_cruz_app/challenges/ui/widgets/add_challenge_dialog.dart';
@@ -27,6 +28,15 @@ class _ChallengesPageState extends State<ChallengesPage> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white, // Cambia el color aquí
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+
+
     _initializeLocale();
     _fetchChallenges();
   }

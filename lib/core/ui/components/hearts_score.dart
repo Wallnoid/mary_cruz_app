@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mary_cruz_app/core/errors/failures.dart';
 
 import '../../../news/models/news_model.dart';
@@ -71,6 +72,15 @@ class _HeartsScoreState extends State<HeartsScore> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white, // Cambia el color aquí
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+
+
     _generateRandomRatingAndVotes();
   }
 
