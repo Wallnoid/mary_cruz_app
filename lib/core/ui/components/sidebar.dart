@@ -168,7 +168,7 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
                       icon: Icons.star_border_outlined,
                       isSelected: selectIndex == SideBar.testimony,
                       isVisible:
-                          true, // controller.listSidebarOptions[5].isVisible ?? false,
+                          controller.listSidebarOptions[5].isVisible ?? false,
                       onTap: () => Get.offNamed("testimony"),
                     ),
                     RowSidebar(
