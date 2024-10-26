@@ -5,7 +5,7 @@ import 'package:mary_cruz_app/candidates/ui/pages/candidate_description_page.dar
 import 'package:mary_cruz_app/candidates/ui/pages/candidates_page.dart';
 import 'package:mary_cruz_app/events/pages/events_page.dart';
 import 'package:mary_cruz_app/survey/pages/survey_page.dart';
-import 'package:mary_cruz_app/testimony/pages/testimony_page.dart';
+import 'package:mary_cruz_app/testimony/ui/pages/testimony_page.dart';
 import '../../../challenges/ui/challenges_page.dart';
 import '../../../comments/ui/opinions_page.dart';
 import '../../../home/ui/pages/home_page.dart';

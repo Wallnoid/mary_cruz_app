@@ -181,18 +181,20 @@ class _CandidatesPageState extends State<CandidatesPage> {
           drawer: GlobalSidebar(
             selectedIndex: SideBar.candidates,
           ),
-          body: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Error de conexión',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 5),
-                Text('Inténtelo más tarde.')
-              ],
+          body: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Error de conexión',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 5),
+                  Text('Inténtelo más tarde.')
+                ],
+              ),
             ),
           ),
         );
@@ -205,34 +207,36 @@ class _CandidatesPageState extends State<CandidatesPage> {
           drawer: const GlobalSidebar(
             selectedIndex: SideBar.candidates,
           ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: Column(
-              children: [
-                Image.asset(
-                  'lib/assets/unidos.png',
-                  width: 200,
-                  height: 150,
-                ),
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      //const SizedBox(height: 20),
-                      //const SizedBox(height: 20),
-
-                      Column(
-                        children: List<Widget>.from(
-                          controller.candidates.map(
-                            (x) => CandidateCard(
-                              candidate: x,
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: Column(
+                children: [
+                  Image.asset(
+                    'lib/assets/unidos.png',
+                    width: 200,
+                    height: 150,
+                  ),
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        //const SizedBox(height: 20),
+                        //const SizedBox(height: 20),
+                  
+                        Column(
+                          children: List<Widget>.from(
+                            controller.candidates.map(
+                              (x) => CandidateCard(
+                                candidate: x,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
