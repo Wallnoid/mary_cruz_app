@@ -122,7 +122,7 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
   void initState() {
     super.initState();
 
-      SystemChrome.setSystemUIOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.white, // Cambia el color aquí
         statusBarIconBrightness: Brightness.dark,
@@ -174,14 +174,14 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
                     const SizedBox(
                       height: 10,
                     ),
-                    
                     RowSidebar(
                       title: controller.listSidebarOptions[1].title ?? '',
                       icon: Icons.people_alt_outlined,
                       isSelected: selectIndex == SideBar.candidates,
                       isVisible:
                           controller.listSidebarOptions[1].isVisible ?? false,
-                      onTap: () => Get.offNamed("candidates"),//Get.offNamed("candidates"),
+                      onTap: () => Get.offNamed(
+                          "candidates"), //Get.offNamed("candidates"),
                     ),
                     RowSidebar(
                       title: controller.listSidebarOptions[0].title ?? '',
@@ -216,7 +216,8 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
                       onTap: () => Get.offNamed("events"),
                     ),
                     RowSidebar(
-                      title: controller.listSidebarOptions[5].title ?? '',
+                      title:
+                          controller.listSidebarOptions[5].title ?? 'Testimony',
                       icon: Icons.star_border_outlined,
                       isSelected: selectIndex == SideBar.testimony,
                       isVisible:
@@ -328,34 +329,32 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
                               ),
                             ],
                           ),
-                        )
-                        , 
+                        ),
                         const SizedBox(
                           height: 10,
                         ),
-                        
                       ],
                     ),
                   )),
-
-                   Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    color: Theme.of(context).colorScheme.surface,
-                    child:  Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                          Text( 
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  color: Theme.of(context).colorScheme.surface,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
                         "versión 0.0.1", // cambiar en iphone
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
                             color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.bold),
-                          ),
-
-                         ],),
-                  ),),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         );

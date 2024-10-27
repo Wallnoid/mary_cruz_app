@@ -22,16 +22,19 @@ import 'package:http/http.dart' as http;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
   bool isConnected = await checkConnectivity();
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      statusBarColor: Colors.white, // Cambia el color aquí
+      statusBarColor: Colors.white,
       statusBarIconBrightness: Brightness.dark,
     ),
   );
-
-
 
   if (isConnected) {
     // Internet is available, initialize Firebase
