@@ -25,7 +25,7 @@ class SidebarController extends GetxController {
         SidebarOptions(id: "", title: "Candidatos" /*"Home"*/, isVisible: true, order: 1),
       ];
 
-      for (var i = 0; i < 7; i++) {
+      for (var i = 0; i < 20; i++) {   //aumentar si se aumenta el menu 
         listSidebarOptions.add(SidebarOptions(
             id: i.toString(),
             title: "Opción $i",

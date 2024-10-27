@@ -69,7 +69,7 @@ class CandidatesModel {
     return CandidatesModel(
       id: json['id'] ?? '',
       name: json['name'],
-      resumen: json['resumen'],
+      resumen: json['resumen']?? '',
       phrase: json['phrase'],
       imageAvatarSmall: json['image'],
       role: json['role'],
@@ -77,7 +77,7 @@ class CandidatesModel {
       workExperience: [],
       investigations: [],
       urlVideo: '',
-      visibleAcademico: json['visible_academico'],
+      visibleAcademico:  json['visible_academico'],
       visibleExperiencia: json['visible_experiencia'],
       visibleInvestigaciones: json['visible_investigacion'],
       imageAvatarBig: json['image_avatar_big'],

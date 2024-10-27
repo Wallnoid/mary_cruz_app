@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -8,6 +9,9 @@ import 'package:mary_cruz_app/core/global_controllers/sidebar_controller.dart';
 import 'package:mary_cruz_app/core/supabase/supabase_instance.dart';
 import 'package:mary_cruz_app/core/utils/screen_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'package:http/http.dart' as http;
+
 
 class GlobalSidebar extends StatefulWidget {
   final SideBar selectedIndex;
@@ -66,6 +70,54 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
     }
   }
 
+  bool conection = true;
+
+  void verificateConection() async {
+    conection = await checkConnectivity();
+
+  }
+
+    Future<bool> checkConnectivity() async {
+    List connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult.length == 0) {
+      return false;
+    }
+
+    if (connectivityResult[0] == ConnectivityResult.mobile ||
+        connectivityResult[0] == ConnectivityResult.wifi) {
+      return await checkNet();
+    }
+
+    return false;
+  }
+
+  Future<bool> checkNet() async {
+    try {
+      final response = await http.get(Uri.parse('https://www.google.com'));
+      return response.statusCode ==
+          200; // Comprobamos si la respuesta fue exitosa
+    } catch (e) {
+      return false; // Si hay un error en la petición
+    }
+  }
+
+  void _updateConnectionStatus(List<ConnectivityResult> result) async {
+    if (result.length == 0) {
+      conection = false;
+    } else {
+      if (result[0] == ConnectivityResult.mobile ||
+          result[0] == ConnectivityResult.wifi) {
+        conection = await checkNet();
+      } else {
+        conection = false;
+      }
+    }
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -77,8 +129,8 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
       ),
     );
 
-
-    // Código de inicialización
+    verificateConection();   
+   // Código de inicialización
     print("Widget inicializado");
   }
 
@@ -133,11 +185,11 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
                     ),
                     RowSidebar(
                       title: controller.listSidebarOptions[0].title ?? '',
-                      icon: Icons.border_color_rounded,
-                      isSelected: selectIndex == SideBar.agenda, //SideBar.home,
+                      icon: conection ? Icons.border_color_rounded : Icons.people_alt_outlined,
+                      isSelected:   conection ? selectIndex == SideBar.agenda : selectIndex == SideBar.candidates, //SideBar.home,
                       isVisible:
                           controller.listSidebarOptions[0].isVisible ?? false,
-                      onTap: () => Get.offNamed("agenda"), //Get.offNamed("/"),
+                      onTap: () => conection ? Get.offNamed("agenda") : Get.offNamed("candidates"), //Get.offNamed("/"),
                     ),
                     RowSidebar(
                       title: controller.listSidebarOptions[2].title ?? '',
