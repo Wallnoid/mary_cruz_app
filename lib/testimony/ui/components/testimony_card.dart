@@ -30,7 +30,7 @@ class _TestimonyCardState extends State<TestimonyCard> {
       ),
     );
 
-    isMuted = true;
+    isMuted = false;
 
     controller = YoutubePlayerController(
       initialVideoId: YoutubePlayer.convertUrlToId(testimony.urlVideo)!,
