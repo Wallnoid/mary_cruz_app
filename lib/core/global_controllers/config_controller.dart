@@ -8,6 +8,8 @@ class ConfigController extends GetxController {
   var isCompletedSurvey = false.obs;
   var currentVersion = "".obs;
   var currentVersionIos = "".obs;
+  var phraseGame = "".obs;
+  var msgGame = "".obs;
 
 
   getCurrentSurvey() async {
@@ -111,6 +113,36 @@ class ConfigController extends GetxController {
     }
   }
 
+
+  getPhraseGeneral() async {
+    try {
+      var data = await supabase
+          .from('configuraciones')
+          .select()
+          .eq('key', 'phraseGeneral')
+          .single();
+
+      phraseGame.value = data['value'];
+    } catch (e) {
+      print("Error al obtener la version $e");
+      phraseGame.value = '';
+    }
+  }
+
+    getMsgPlayGeneral() async {
+    try {
+      var data = await supabase
+          .from('configuraciones')
+          .select()
+          .eq('key', 'msgPlayGeneral')
+          .single();
+
+      msgGame.value = data['value'];
+    } catch (e) {
+      print("Error al obtener la version $e");
+      msgGame.value = '';
+    }
+  }
 
 
 }

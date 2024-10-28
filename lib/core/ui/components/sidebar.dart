@@ -1,4 +1,6 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -7,6 +9,9 @@ import 'package:mary_cruz_app/core/global_controllers/sidebar_controller.dart';
 import 'package:mary_cruz_app/core/supabase/supabase_instance.dart';
 import 'package:mary_cruz_app/core/utils/screen_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'package:http/http.dart' as http;
+
 
 class GlobalSidebar extends StatefulWidget {
   final SideBar selectedIndex;
@@ -65,10 +70,67 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
     }
   }
 
+  bool conection = true;
+
+  void verificateConection() async {
+    conection = await checkConnectivity();
+
+  }
+
+    Future<bool> checkConnectivity() async {
+    List connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult.length == 0) {
+      return false;
+    }
+
+    if (connectivityResult[0] == ConnectivityResult.mobile ||
+        connectivityResult[0] == ConnectivityResult.wifi) {
+      return await checkNet();
+    }
+
+    return false;
+  }
+
+  Future<bool> checkNet() async {
+    try {
+      final response = await http.get(Uri.parse('https://www.google.com'));
+      return response.statusCode ==
+          200; // Comprobamos si la respuesta fue exitosa
+    } catch (e) {
+      return false; // Si hay un error en la petición
+    }
+  }
+
+  void _updateConnectionStatus(List<ConnectivityResult> result) async {
+    if (result.length == 0) {
+      conection = false;
+    } else {
+      if (result[0] == ConnectivityResult.mobile ||
+          result[0] == ConnectivityResult.wifi) {
+        conection = await checkNet();
+      } else {
+        conection = false;
+      }
+    }
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+
   @override
   void initState() {
     super.initState();
-    // Código de inicialización
+
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white, // Cambia el color aquí
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+
+    verificateConection();   
+   // Código de inicialización
     print("Widget inicializado");
   }
 
@@ -89,7 +151,7 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
                   children: <Widget>[
                     InkWell(
                       onTap: () {
-                        Get.offNamed("/");
+                        Get.offNamed("/candidates");
                       },
                       splashColor: Colors.transparent,
                       child: SizedBox(
@@ -113,35 +175,36 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
                       height: 10,
                     ),
                     RowSidebar(
-                      title: controller.listSidebarOptions[0].title ?? '',
-                      icon: Icons.home_outlined,
-                      isSelected: selectIndex == SideBar.home,
-                      isVisible:
-                          controller.listSidebarOptions[0].isVisible ?? false,
-                      onTap: () => Get.offNamed("/"),
-                    ),
-                    RowSidebar(
                       title: controller.listSidebarOptions[1].title ?? '',
                       icon: Icons.people_alt_outlined,
                       isSelected: selectIndex == SideBar.candidates,
-                      isVisible: true,
-                      // controller.listSidebarOptions[1].isVisible ?? false,
-                      onTap: () => Get.offNamed("candidates"),
+                      isVisible:
+                          controller.listSidebarOptions[1].isVisible ?? false,
+                      onTap: () => Get.offNamed(
+                          "candidates"), //Get.offNamed("candidates"),
+                    ),
+                    RowSidebar(
+                      title: controller.listSidebarOptions[0].title ?? '',
+                      icon: conection ? Icons.border_color_rounded : Icons.people_alt_outlined,
+                      isSelected:   conection ? selectIndex == SideBar.agenda : selectIndex == SideBar.candidates, //SideBar.home,
+                      isVisible:
+                          controller.listSidebarOptions[0].isVisible ?? false,
+                      onTap: () => conection ? Get.offNamed("agenda") : Get.offNamed("candidates"), //Get.offNamed("/"),
                     ),
                     RowSidebar(
                       title: controller.listSidebarOptions[2].title ?? '',
                       icon: Icons.assignment_outlined,
                       isSelected: selectIndex == SideBar.proposals,
-                      isVisible: true,
-                      // controller.listSidebarOptions[2].isVisible ?? false,
+                      isVisible:
+                          controller.listSidebarOptions[2].isVisible ?? false,
                       onTap: () => Get.offNamed("proposals"),
                     ),
                     RowSidebar(
                       title: controller.listSidebarOptions[3].title ?? '',
                       icon: Icons.newspaper_outlined,
                       isSelected: selectIndex == SideBar.news,
-                      isVisible: true,
-                      // controller.listSidebarOptions[3].isVisible ?? false,
+                      isVisible:
+                          controller.listSidebarOptions[3].isVisible ?? false,
                       onTap: () => Get.offNamed("news"),
                     ),
                     RowSidebar(
@@ -153,7 +216,8 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
                       onTap: () => Get.offNamed("events"),
                     ),
                     RowSidebar(
-                      title: controller.listSidebarOptions[5].title ?? '',
+                      title:
+                          controller.listSidebarOptions[5].title ?? 'Testimony',
                       icon: Icons.star_border_outlined,
                       isSelected: selectIndex == SideBar.testimony,
                       isVisible:
@@ -189,7 +253,7 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
                       icon: Icons.emoji_emotions,
                       isSelected: selectIndex == SideBar.challenges,
                       isVisible:
-                      controller.listSidebarOptions[9].isVisible ?? false,
+                          controller.listSidebarOptions[9].isVisible ?? false,
                       onTap: () => Get.offNamed("challenges"),
                     ),
                     SizedBox(
@@ -265,10 +329,32 @@ class _GlobalSidebarState extends State<GlobalSidebar> {
                               ),
                             ],
                           ),
-                        )
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
                       ],
                     ),
                   )),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  color: Theme.of(context).colorScheme.surface,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "versión 0.0.1", // cambiar en iphone
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         );

@@ -6,6 +6,7 @@ class DiaryModel {
   final String initTime;
   final String endTime;
   final String place;
+  final bool isVisible;
 
   DiaryModel({
     this.id,
@@ -15,6 +16,7 @@ class DiaryModel {
     required this.initTime,
     required this.endTime,
     required this.place,
+    required this.isVisible,
   });
 
   factory DiaryModel.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class DiaryModel {
       date: DateTime.parse(json['date']),
       initTime: json['init_time'],
       endTime: json['end_time'],
+      isVisible: json['active'],
     );
   }
 

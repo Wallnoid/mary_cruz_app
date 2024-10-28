@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 
 import '../../../../news/models/news_model.dart';
 
@@ -116,10 +117,11 @@ class _InfoContainerState extends State<InfoContainer> {
                 SizedBox(
                   height: 10,
                 ),
-                Text(
-                  widget.description,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                  textAlign: TextAlign.justify,
+                //Text(
+                HtmlWidget(
+                      "<p style='text-align: justify;'>${widget.description}</p>",
+                  //style: Theme.of(context).textTheme.bodyMedium,
+                  //textAlign: TextAlign.justify,
                 ),
                 SizedBox(
                   height: 10,

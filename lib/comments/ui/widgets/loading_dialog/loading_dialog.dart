@@ -63,6 +63,28 @@ class _CommentsLoadingDialogState extends State<CommentsLoadingDialog> {
                             Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
+                                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                                    padding:
+                                    const EdgeInsets.symmetric(vertical: 15),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    'Cancelar',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(color: Colors.white, fontSize: 18),
+                                  ),
+                                )),
+                            SizedBox(width: 10),
+                            Expanded(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
                                     backgroundColor: Theme.of(context).primaryColor,
                                     padding:
                                     const EdgeInsets.symmetric(vertical: 15),
@@ -82,28 +104,6 @@ class _CommentsLoadingDialogState extends State<CommentsLoadingDialog> {
                                         ?.copyWith(color: Colors.white, fontSize: 18),
                                   ),
                                 )),
-                            SizedBox(width: 10),
-                            Expanded(
-                                child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(context).colorScheme.secondary,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 15),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              onPressed: () async {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(
-                                'Cancelar',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: Colors.white, fontSize: 18),
-                              ),
-                            )),
                           ],
                         ),
                       );

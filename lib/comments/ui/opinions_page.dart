@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mary_cruz_app/comments/ui/widgets/age_custom_text_field.dart';
 import 'package:mary_cruz_app/comments/ui/widgets/loading_dialog/loading_dialog.dart';
 import 'package:mary_cruz_app/comments/controllers/loading_dialog_controller.dart';
 import 'package:mary_cruz_app/comments/ui/widgets/terms_conditions_dialog.dart';
 import 'package:mary_cruz_app/core/errors/failures.dart';
+import 'package:mary_cruz_app/core/ui/components/custom_appbar.dart';
 import 'package:mary_cruz_app/core/ui/components/custom_forms/custom_text_field.dart';
 import '../../core/data/faculties_datasource.dart';
 import '../../core/data/users_datasource.dart';
@@ -41,12 +42,10 @@ class OpinionsPageState extends State<OpinionsPage> {
 
   List<DropdownData> facultyData = [];
 
- 
-
   List<DropdownData> personTypeData = [
     DropdownData(value: 'ESTUDIANTE', display: 'Estudiante'),
     DropdownData(value: 'ADMINISTRATIVO', display: 'Administrativo'),
-    DropdownData(value: 'PROFESOR', display: 'Profesor'),
+    DropdownData(value: 'DOCENTE', display: 'Docente'),
   ];
 
   List<DropdownData> genreData = [
@@ -72,10 +71,20 @@ class OpinionsPageState extends State<OpinionsPage> {
   String? commentError;
   String? nameError;
   String? emailError;
+  bool isError = false;
 
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white, // Cambia el color aquí
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+
+
     getFacultyData();
     if (facultyData.isNotEmpty) {
       facultyController.text = facultyData[0].value;
@@ -86,17 +95,24 @@ class OpinionsPageState extends State<OpinionsPage> {
   }
 
   void getFacultyData() async {
-    final facultiesData = await FacultiesDataSource().getAllFaculties();
-    setState(() {
-      facultyData = facultiesData
-          .map((faculty) => DropdownData(
-              value: faculty.id.toString(), display: faculty.nombre))
-          .toList();
+    try {
+      final facultiesData = await FacultiesDataSource().getAllFaculties();
+      setState(() {
+        facultyData = facultiesData
+            .map((faculty) => DropdownData(
+                value: faculty.id.toString(), display: faculty.nombre))
+            .toList();
 
-      if (facultyData.isNotEmpty) {
-        facultyController.text = facultyData[0].value;
-      }
-    });
+        if (facultyData.isNotEmpty) {
+          facultyController.text = facultyData[0].value;
+        }
+      });
+    } catch (e) {
+      print('Error al obtener las facultades');
+      setState(() {
+        isError = true;
+      });
+    }
   }
 
   void validateInputs() {
@@ -106,7 +122,7 @@ class OpinionsPageState extends State<OpinionsPage> {
       personTypeError = personTypeController.text.isEmpty
           ? 'Tipo de persona es requerido'
           : null;
-      genreError = genreController.text.isEmpty ? 'Genero es requerido' : null;
+      genreError = genreController.text.isEmpty ? 'Género es requerido' : null;
       ageError = ageController.text.isEmpty
           ? 'Edad es requerida'
           : !RegExp(r'^(1[6-9]|[2-7][0-9]|80)$').hasMatch(ageController.text)
@@ -278,6 +294,31 @@ class OpinionsPageState extends State<OpinionsPage> {
         body: Center(child: CircularProgressIndicator()),
       );
     }
+
+    if (!isLoading && isError) {
+      return const Scaffold(
+        appBar: CustomAppbar(
+          title: 'Dinos, ¿qué piensas?',
+        ),
+        drawer: GlobalSidebar(
+          selectedIndex: SideBar.opinions,
+        ),
+        body: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Error de conexión',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 5),
+              Text('Inténtelo más tarde.')
+            ],
+          ),
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dinos, ¿qué piensas?'),
@@ -324,7 +365,7 @@ class OpinionsPageState extends State<OpinionsPage> {
                 children: [
                   Expanded(
                     child: Dropdown(
-                      label: 'Genero',
+                      label: 'Género',
                       getData: genreData,
                       value: 'M',
                       height: 50.0,
@@ -362,9 +403,8 @@ class OpinionsPageState extends State<OpinionsPage> {
               Column(
                 children: [
                   Text(
-                      'Desea registrar su correo electronico para recibir noticias y temas de su interes? ',
-                      style: GoogleFonts.roboto(
-                          fontSize: 16, fontWeight: FontWeight.w500)),
+                      'Desea registrar su correo electrónico para recibir noticias y temas de su interés? ',
+                      style: Theme.of(context).textTheme.bodyMedium),
                   Row(
                     children: [
                       Expanded(
@@ -468,7 +508,10 @@ class InputColumn extends StatelessWidget {
       children: [
         Text(
           title,
-          style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium!
+              .copyWith(fontWeight: FontWeight.bold),
         ),
         textField,
       ],

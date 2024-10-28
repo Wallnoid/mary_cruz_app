@@ -25,13 +25,13 @@ class UserModel {
     try{
       return UserModel(
           id: json['id'],
-          facultad: json['facultad'],
-          tipoUsuario: json['tipo_usuario'],
-          genero: json['genero'],
-          edad: int.parse(json['edad']),
-          idDispositivo: json['id_dispositivo'],
-          email: json['email'],
-          tokenUser: json['token_user']
+          facultad: json['facultad'] ?? '',
+          tipoUsuario: json['tipo_usuario']?? '',
+          genero: json['genero'] ?? '',
+          edad: json['edad'] != null ? int.parse(json['edad']) : 0,
+          idDispositivo: json['id_dispositivo'] ?? 0,
+          email: json['email'] ?? '',
+          tokenUser: json['token_user'] ?? ''
       );
     }catch(e,stack){
       print(stack);

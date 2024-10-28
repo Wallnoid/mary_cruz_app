@@ -28,6 +28,10 @@ class DiaryController extends GetxController {
     final Map<int, List<DiaryModel>> sectionsPerMonth = {};
 
     for (var diary in diaryList) {
+      if (!diary.isVisible) {
+        continue;
+      }
+
       final month = diary.date.month;
 
       if (!sectionsPerMonth.containsKey(month)) {

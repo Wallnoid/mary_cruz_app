@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:mary_cruz_app/candidates/provider/candidates_controller.dart';
+import 'package:mary_cruz_app/core/models/candidates_model.dart';
 import '../../../core/data/faculties_datasource.dart';
 import '../../../core/models/faculties_model.dart';
 import '../../../proposals/models/proposed_approach_model.dart';
@@ -11,11 +14,13 @@ class FilterDialog extends StatefulWidget {
 
   final List<FacultyModel>? facultadesGeneral;
   final List<ProposedApproachModel>? enfoquesGeneral;
+  final List<CandidatesModel>? candidatesGeneral;
 
   FilterDialog({
     Key? key,
     this.facultadesGeneral,
     this.enfoquesGeneral,
+    this.candidatesGeneral,
   }) : super(key: key);
   @override
   _FilterDialogState createState() => _FilterDialogState();
@@ -24,11 +29,17 @@ class FilterDialog extends StatefulWidget {
 class _FilterDialogState extends State<FilterDialog> {
   List<FacultyModel> _facultades = [];
   List<ProposedApproachModel> _enfoques = [];
+    List<CandidatesModel> _candidatos = [];
+
   List<FacultyModel> _selectedFacultades = [];
   List<ProposedApproachModel> _selectedEnfoques = [];
+  List<CandidatesModel> _selectedCadidates = [];
+
   bool _isLoading = true;
 
   bool _showAllFacultades = false;
+  bool _showAllCandidatos = false;
+
   bool _showAllEnfoques = false;
 
   @override
@@ -39,20 +50,26 @@ class _FilterDialogState extends State<FilterDialog> {
 
   Future<void> _fetchData() async {
     try {
-      final faculties = await FacultiesDataSource().getAllFaculties();
+      CandidatesController controller =
+      Get.put(CandidatesController(), permanent: true);
+      
+      //final faculties = await FacultiesDataSource().getAllFaculties();
       final approaches =
       await ProposedApproachesDataSource().getAllProposedApproaches();
 
+      await controller.getCandidates();
+
       setState(() {
-        _facultades = faculties;
+        //_facultades = faculties;
         _enfoques = approaches;
+        _candidatos = controller.candidates;
         _isLoading = false;
       });
 
 
       _selectedFacultades = widget.facultadesGeneral!;
       _selectedEnfoques = widget.enfoquesGeneral!;
-
+      _selectedCadidates = widget.candidatesGeneral!;
      
     } catch (e) {
       print('Error al obtener datos: $e');
@@ -82,16 +99,55 @@ class _FilterDialogState extends State<FilterDialog> {
               ),
             ],
           ),
+                  
           const Divider(),
           Center(
-            child: Text('Facultades',
+            child: Text("Candidatos", //'Facultades',
                 style: Theme.of(context).textTheme.titleMedium),
           ),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  ..._facultades
+               
+
+                  ..._candidatos
+                      .take(_showAllCandidatos ? _candidatos.length : 5)
+                      .map((candida) => CheckboxListTile(
+                    title: Text(candida.name,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(
+                            fontSize: 18,
+                            fontWeight: FontWeight.normal)),
+                    value: _selectedCadidates.where((e) => e.name == candida.name).toList().isNotEmpty ? true: false, 
+                    onChanged: (bool? value) {
+                      if (_selectedCadidates.where((e) => e.name == candida.name).toList().isEmpty) {
+                          _selectedCadidates.add(candida);
+                        } else {
+                          //_selectedFacultades.remove(facultad);
+      
+                          _selectedCadidates.removeWhere((e) => e.name == candida.name);
+                        }
+      
+                      setState(() {
+                        _selectedCadidates;
+                      });
+                    },
+                    activeColor: Theme.of(context).primaryColor,
+                  )),
+                  if (_candidatos.length > 5)
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _showAllCandidatos = !_showAllCandidatos;
+                        });
+                      },
+                      child: Text(_showAllCandidatos ? 'Ver menos' : 'Ver más'),
+                    ),
+            
+                  /*..._facultades
                       .take(_showAllFacultades ? _facultades.length : 5)
                       .map((facultad) => CheckboxListTile(
                     title: Text(facultad.siglas,
@@ -107,11 +163,10 @@ class _FilterDialogState extends State<FilterDialog> {
                           _selectedFacultades.add(facultad);
                         } else {
                           //_selectedFacultades.remove(facultad);
-
+      
                           _selectedFacultades.removeWhere((e) => e.siglas == facultad.siglas);
-                          print(facultad.siglas);
                         }
-
+      
                       setState(() {
                         _selectedFacultades;
                       });
@@ -126,7 +181,10 @@ class _FilterDialogState extends State<FilterDialog> {
                         });
                       },
                       child: Text(_showAllFacultades ? 'Ver menos' : 'Ver más'),
-                    ),
+                    ),*/
+            
+            
+            
                   const Divider(),
                   Text('Enfoques',
                       style: Theme.of(context).textTheme.titleMedium),
@@ -140,13 +198,15 @@ class _FilterDialogState extends State<FilterDialog> {
                             ?.copyWith(
                             fontSize: 18,
                             fontWeight: FontWeight.normal)),
-                    value: _selectedEnfoques.contains(enfoque),
+                    value: _selectedEnfoques.where((e) => e.titulo == enfoque.titulo).toList().isNotEmpty ? true: false, 
+                    
                     onChanged: (bool? value) {
                       setState(() {
-                        if (value == true) {
+                      if (_selectedEnfoques.where((e) => e.titulo == enfoque.titulo).toList().isEmpty) {
                           _selectedEnfoques.add(enfoque);
                         } else {
-                          _selectedEnfoques.remove(enfoque);
+                          _selectedEnfoques.removeWhere((e) => e.titulo == enfoque.titulo);
+      
                         }
                       });
                     },
@@ -166,6 +226,7 @@ class _FilterDialogState extends State<FilterDialog> {
               ),
             ),
           ),
+          
           const Divider(),
           Row(
             children: [
@@ -180,7 +241,7 @@ class _FilterDialogState extends State<FilterDialog> {
                     ),
                     onPressed: () {
                       //final filterController = Get.put(FilterController());
-                      print("_selectedFacultades "+ _selectedFacultades.toString());
+                      //print("_selectedFacultades "+ _selectedFacultades.toString());
                       //filterController.setFacultades(_selectedFacultades);
                       //filterController.setEnfoques(_selectedEnfoques);
                       //print('Facultades seleccionadas: ${filterController.facultades}');

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:mary_cruz_app/core/enums/sidebar.dart';
@@ -30,6 +31,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white, // Cambia el color aquí
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+
 
     verificateConection();
 
@@ -165,22 +174,27 @@ class _HomePageState extends State<HomePage> {
       if (!diaryController.isLoading.value && diaryController.error.value) {
         return const Scaffold(
           appBar: CustomAppbar(
-            title: 'Candidatos',
+            title: 'Agenda'//'Home',
           ),
           drawer: GlobalSidebar(
-            selectedIndex: SideBar.candidates,
+            selectedIndex: SideBar.agenda//SideBar.home,
           ),
           body: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                /*Image.asset(
+                      'lib/assets/logo2.png',
+                      width: 200,
+                      height: 150,
+                    ),*/
                 Text(
                   'Error de conexión',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 5),
-                Text('Intentelo más tarde.')
+                Text('Inténtelo más tarde.')
               ],
             ),
           ),
@@ -194,10 +208,10 @@ class _HomePageState extends State<HomePage> {
         child: SafeArea(
           child: Scaffold(
               appBar: const CustomAppbar(
-                title: 'Home',
+                title: "Agenda", /*'Home',*/
               ),
               drawer: const GlobalSidebar(
-                selectedIndex: SideBar.home,
+                selectedIndex: SideBar.agenda //SideBar.home,
               ),
               body: Padding(
                 padding: const EdgeInsets.only(
@@ -206,7 +220,7 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Image.asset(
-                      'lib/assets/logo.png',
+                      'lib/assets/logo2.png',
                       width: 200,
                       height: 150,
                     ),
@@ -244,6 +258,7 @@ class _HomePageState extends State<HomePage> {
                       child: ListView.builder(
                         itemCount: diaryController.sectionsPerMonth.length,
                         itemBuilder: (context, index) {
+                          
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 25),
                             child: SectionPerMonth(

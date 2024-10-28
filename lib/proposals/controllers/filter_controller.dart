@@ -1,13 +1,20 @@
 import 'package:get/get.dart';
+import 'package:mary_cruz_app/core/models/candidates_model.dart';
 import '../../core/models/faculties_model.dart';
 import '../models/proposed_approach_model.dart';
 
 class FilterController extends GetxController {
   var facultades = <FacultyModel>[].obs;
   var enfoques = <ProposedApproachModel>[].obs;
+  var candidatos = <CandidatesModel>[].obs;
+
 
   void setFacultades(List<FacultyModel> newFacultades) {
     facultades.assignAll(newFacultades);
+  }
+
+  void setCandidatos(List<CandidatesModel> newCandidato) {
+    candidatos.assignAll(newCandidato);
   }
 
   void setEnfoques(List<ProposedApproachModel> newEnfoques) {
@@ -19,6 +26,10 @@ class FilterController extends GetxController {
 
     void addEnfoque(ProposedApproachModel enfoque) {
       enfoques.add(enfoque);
+    }
+
+  void addCandidato(CandidatesModel candidato) {
+      candidatos.add(candidato);
     }
   }
 
@@ -39,6 +50,10 @@ class FilterController extends GetxController {
     return enfoques;
   }
 
+   List<CandidatesModel> getCandidatos() {
+    return candidatos;
+  }
+
 
    String getEnfoquesString() {
     String valEnfoque = "";
@@ -51,12 +66,15 @@ class FilterController extends GetxController {
 
 
    bool hasInfo(){
-    return (facultades.length + enfoques.length) >0 ? true : false;
+    //return (facultades.length + enfoques.length + candidatos.length) >0 ? true : false;
+    return ( enfoques.length + candidatos.length) >0 ? true : false;
+
    }
 
     void eraseInfo(){
       facultades.clear();
       enfoques.clear();
+      candidatos.clear();
    }
     
 

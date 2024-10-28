@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart'; // Importa para inicializar la localización
 import 'package:mary_cruz_app/core/enums/sidebar.dart';
-import 'package:mary_cruz_app/core/models/user_model.dart';
-import 'package:mary_cruz_app/core/models/vote_model.dart';
 import 'package:mary_cruz_app/core/ui/components/custom_appbar.dart';
 import 'package:mary_cruz_app/core/ui/components/custom_containers/info_container.dart';
 import 'package:mary_cruz_app/core/ui/components/sidebar.dart';
 import 'package:mary_cruz_app/news/models/news_model.dart';
 import 'package:mary_cruz_app/news/data/news_datasource.dart';
 
-import '../../../core/data/users_datasource.dart';
 import '../../../core/ui/components/hearts_score.dart';
-import '../../../core/utils/cellphone_info.dart';
 
 class NewsPage extends StatefulWidget {
   const NewsPage({super.key});
@@ -28,6 +25,14 @@ class _NewsPageState extends State<NewsPage> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white, // Cambia el color aquí
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+
     _initializeLocale();
     _fetchNews();
   }
@@ -83,7 +88,20 @@ class _NewsPageState extends State<NewsPage> {
         body: _isLoading
             ? const Center(child: CircularProgressIndicator())
             : _news.isEmpty
-            ? const Center(child: Text('No hay noticias disponibles'))
+            ? const Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Error de conexión',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 5),
+              Text('Inténtelo más tarde.')
+            ],
+          ),
+        )
             : RefreshIndicator(
           onRefresh: _refreshNews,
           child: _buildNewsList(),

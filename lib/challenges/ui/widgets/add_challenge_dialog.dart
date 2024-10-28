@@ -1,15 +1,14 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/data/users_datasource.dart';
 import '../../../core/models/user_model.dart';
 import '../../../core/utils/cellphone_info.dart';
 import '../../data/challenges_datasource.dart';
 import '../../models/challenge_model.dart';
-import '../../../core/errors/failures.dart'; // Asegúrate de importar DuplicateFailure
+import '../../../core/errors/failures.dart';
 
 class StepperDialog extends StatefulWidget {
-
   const StepperDialog({super.key});
 
   @override
@@ -41,7 +40,8 @@ class _StepperDialogState extends State<StepperDialog> {
   Future<void> onSaveChallenge() async {
     try {
       String deviceInfo = await getDeviceId();
-      final UserModel user = await UsersDataSource().getUserData(idDispositivo: deviceInfo);
+      final UserModel user =
+          await UsersDataSource().getUserData(idDispositivo: deviceInfo);
       final ChallengeUserModel challengeUser = ChallengeUserModel(
         idUsuario: user.id ?? '',
         nombre: _nameController.text,
@@ -86,17 +86,14 @@ class _StepperDialogState extends State<StepperDialog> {
               padding: const EdgeInsets.only(bottom: 8),
               child: Text(
                 _errorMessage!,
-                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                style:
+                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
               ),
             ),
           Expanded(
             child: Stepper(
               currentStep: _currentStep,
-              onStepTapped: (int step) {
-                setState(() {
-                  _currentStep = step;
-                });
-              },
+              onStepTapped: null, // Deshabilitar el avance al tocar
               onStepContinue: () {
                 // Valida los formularios en cada paso antes de continuar
                 if (_currentStep == 1) {
@@ -149,9 +146,138 @@ class _StepperDialogState extends State<StepperDialog> {
                 // Paso 1
                 Step(
                   title: Text('Cómo cumplir los retos?'),
-                  content: Text('Descripción del paso 1'),
+                  content: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Instrucciones para Compartir tu Video:',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 8),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '1. ',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              TextSpan(
+                                text: 'Sube tu video a Google Drive. ',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              TextSpan(
+                                text:
+                                    'Asegúrate de que el archivo esté en formato compatible y que no exceda el límite de tamaño permitido.',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '2. ',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              TextSpan(
+                                text: 'Ajusta la configuración de privacidad: ',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              TextSpan(
+                                text:
+                                    'Haz clic derecho en el video, selecciona "Compartir", y en "Obtener enlace", cambia la opción a "Cualquier persona con el enlace" para que no sea público.',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '3. ',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              TextSpan(
+                                text: 'Especifica el acceso: ',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'En la sección "Compartir con personas y grupos", introduce el correo: ',
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                  TextSpan(
+                                    text: 'marycruzuta@gmail.com',
+                                    style: TextStyle(
+                                      color: Colors.blue, // Cambia el color si lo deseas
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        launchUrl(Uri.parse('mailto:marycruzuta@gmail.com'));
+                                      },
+                                  ),
+                                  TextSpan(
+                                    text:
+                                    ' del destinatario que deseas que tenga acceso al video. Asegúrate de configurar el permiso como "Puede ver" para que solo pueda visualizarlo, sin posibilidad de editar.',
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              )
+
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '4. ',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              TextSpan(
+                                text: 'Envía la invitación: ',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              TextSpan(
+                                text:
+                                    'Haz clic en "Enviar" para compartir el enlace de forma segura.',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          '¡Listo! Tu video estará accesible solo para el correo seleccionado.',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
+                  ),
                   isActive: _currentStep >= 0,
-                  state: _currentStep > 0 ? StepState.complete : StepState.indexed,
+                  state:
+                      _currentStep > 0 ? StepState.complete : StepState.indexed,
                 ),
                 // Paso 2 - Formulario de información
                 Step(
@@ -163,7 +289,8 @@ class _StepperDialogState extends State<StepperDialog> {
                       child: Column(
                         children: [
                           TextFormField(
-                            controller: _nameController, // Controlador del nombre
+                            controller:
+                                _nameController, // Controlador del nombre
                             decoration: InputDecoration(labelText: 'Nombre'),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -173,9 +300,12 @@ class _StepperDialogState extends State<StepperDialog> {
                             },
                           ),
                           TextFormField(
-                            controller: _phoneController, // Controlador del teléfono
-                            keyboardType: TextInputType.phone, // Teclado numérico
-                            decoration: InputDecoration(labelText: 'Número de teléfono'),
+                            controller:
+                                _phoneController, // Controlador del teléfono
+                            keyboardType:
+                                TextInputType.phone, // Teclado numérico
+                            decoration: InputDecoration(
+                                labelText: 'Número de teléfono'),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Por favor ingresa tu número de teléfono';
@@ -192,7 +322,8 @@ class _StepperDialogState extends State<StepperDialog> {
                     ),
                   ),
                   isActive: _currentStep >= 1,
-                  state: _currentStep > 1 ? StepState.complete : StepState.indexed,
+                  state:
+                      _currentStep > 1 ? StepState.complete : StepState.indexed,
                 ),
                 // Paso 3 - Formulario del enlace
                 Step(
@@ -204,13 +335,15 @@ class _StepperDialogState extends State<StepperDialog> {
                       child: Column(
                         children: [
                           TextFormField(
-                            controller: _urlController, // Controlador del enlace
-                            decoration: InputDecoration(labelText: 'Url Google Drive'),
+                            controller:
+                                _urlController, // Controlador del enlace
+                            decoration:
+                                InputDecoration(labelText: 'Url Google Drive'),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Por favor ingresa el link';
                               } else if (!RegExp(
-                                  r'^(https?:\/\/)?([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$')
+                                      r'^(https?:\/\/)?([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$')
                                   .hasMatch(value)) {
                                 return 'Por favor ingresa un URL válido';
                               }
@@ -222,7 +355,8 @@ class _StepperDialogState extends State<StepperDialog> {
                     ),
                   ),
                   isActive: _currentStep >= 2,
-                  state: _currentStep == 2 ? StepState.editing : StepState.indexed,
+                  state:
+                      _currentStep == 2 ? StepState.editing : StepState.indexed,
                 ),
               ],
             ),

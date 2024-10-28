@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:mary_cruz_app/candidates/provider/candidates_controller.dart';
 import 'package:mary_cruz_app/core/models/candidates_model.dart';
 import 'package:mary_cruz_app/core/ui/components/custom_forms/role_chip.dart';
@@ -28,6 +28,15 @@ class _CandidateDescriptionPageState extends State<CandidateDescriptionPage> {
 
   @override
   void initState() {
+
+      SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white, // Cambia el color aquí
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+
+
     candidate = candidateController.candidate.value;
     isMuted = true;
 

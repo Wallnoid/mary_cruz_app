@@ -1,6 +1,8 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:mary_cruz_app/candidates/ui/pages/candidates_page.dart';
 //import 'package:launch_review/launch_review.dart';
 import 'package:mary_cruz_app/core/global_controllers/config_controller.dart';
 import 'package:mary_cruz_app/home/ui/pages/home_page.dart';
@@ -22,7 +24,7 @@ openStore() {
 }
 
 void openApkPure(String packageName) async {
-  final url = 'https://apkpure.com/es/$packageName';
+  final url = 'https://marycruzuta.com/apk/marycruzapp.apk';
   if (await canLaunch(url)) {
     await launch(url);
   } else {
@@ -34,6 +36,14 @@ class _FirstPageState extends State<FirstPage> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white, // Cambia el color aquí
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+
 
 
     var connectivityResult = resultConnectivity();
@@ -80,7 +90,7 @@ class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
     
-    return  const HomePage(); // Renderiza el HomePage sin lógica de verificación en el build
+    return  const CandidatesPage(); //HomePage(); // Renderiza el HomePage sin lógica de verificación en el build
   }
 }
 

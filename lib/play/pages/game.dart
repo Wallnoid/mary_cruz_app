@@ -1,9 +1,17 @@
 import 'dart:async';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:mary_cruz_app/core/global_controllers/config_controller.dart';
 import 'package:mary_cruz_app/play/pages/game_logic.dart';
 import 'package:mary_cruz_app/play/pages/widgets/board.dart';
+
+import 'package:http/http.dart' as http;
+
 
 class Game extends StatefulWidget {
   Game({Key? key}) : super(key: key);
@@ -23,6 +31,11 @@ class _GameState extends State<Game> {
   int startTime = 60;
   String level = '';
   var complete = 0;
+
+  String phraseGeneralShow = '"Unidos lo haremos posible"';
+  String msgGeneralGame = "";
+
+
   void startTimer(BuildContext context) {
     if (startTime == 0) {}
     const oneSecond = Duration(seconds: 1);
@@ -47,8 +60,63 @@ class _GameState extends State<Game> {
   void initState() {
     super.initState();
 
+      SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white, // Cambia el color aquí
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+
+
     startTimer(context);
+    msgGeneralGame = "Tu puntuación fue de: $score";
+
+    getInfoPhrase();
+   
   }
+
+
+  getInfoPhrase()async{
+     bool isConnected = await checkConnectivity();
+
+    if (isConnected) {
+
+      ConfigController configController =
+        Get.put(ConfigController(), permanent: true);
+
+
+      await configController.getPhraseGeneral();
+      await configController.getMsgPlayGeneral();
+
+      phraseGeneralShow = configController.phraseGame.value;
+      msgGeneralGame = configController.msgGame.value;
+    }
+  }
+
+
+  Future<bool> checkConnectivity() async {
+    List connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult.length == 0) {
+      return false;
+    }
+
+    if(connectivityResult[0] == ConnectivityResult.mobile ||
+        connectivityResult[0] == ConnectivityResult.wifi){
+          return await checkNet();
+      }
+
+    return false;
+  } 
+
+
+  Future<bool> checkNet()async{
+   try {
+    final response = await http.get(Uri.parse('https://www.google.com'));
+    return response.statusCode == 200; // Comprobamos si la respuesta fue exitosa
+  } catch (e) {
+    return false; // Si hay un error en la petición
+  }
+}
 
   @override
   void didChangeDependencies() {
@@ -72,7 +140,7 @@ class _GameState extends State<Game> {
           Padding(
             padding:  EdgeInsets.only(bottom: ScreenUtil().setHeight(5)),
             child: Text(
-                          'Unidos lo haremos posible',
+                          phraseGeneralShow,
                           style:
                               Theme.of(context).textTheme.displayMedium!.copyWith(
                                     fontWeight: FontWeight.w500,
@@ -145,8 +213,8 @@ class _GameState extends State<Game> {
                                 //_game.isEnabled = [true, true, true, true, true, true,true, true, true, true, true, true,true, true, true, true, true, true, true];
                                   _game.isEnabled = [true, true, true, true, false, true,true, true, true /*, true, true, true,true, true, true, true, true, true, true*/];
         
-                                _showDialog(context, 'Ganaste',
-                                    'Tu puntuación fue de: $score');
+                                _showDialog(context, 'Ganaste', 
+                                    'Tu puntuación fue de: $score \n$msgGeneralGame'); 
                                 timer.cancel();
                               }
                             } else {
@@ -231,7 +299,8 @@ class _GameState extends State<Game> {
                 child:  Text('Regresar a pantalla principal', style: TextStyle(fontSize: ScreenUtil().setSp(14)),),
                 onPressed: () {
                   // Navigator.of(context).pop();
-                  Navigator.pushNamed(context, 'home');
+                  //Navigator.pushNamed(context, 'home');
+                  Navigator.pushNamed(context, '/candidates');
                 },
               )
             ],

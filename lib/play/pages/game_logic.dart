@@ -28,15 +28,15 @@ class GameLogic {
     cardCount = 9; //16;
     axiCount = 3; //4;
     card_list = [
-      'lib/assets/2dd50e12-9829-4460-ab85-12cd2df9f32e.JPG',
-      'lib/assets/5a0a96ad-cbf9-4902-b997-224a519e285d.JPG',
-      'lib/assets/a9dea6e8-7af5-4411-b49a-1c317124ba8f.JPG',
-      'lib/assets/b470655f-0bec-4670-939e-c203b6d2d4ef.JPG',
+      'lib/assets/candidato1.png',
+      'lib/assets/candidato2.png',
+      'lib/assets/candidato3.png',
+      'lib/assets/candidato4.png',
       'lib/assets/logo2.png',
-      'lib/assets/2dd50e12-9829-4460-ab85-12cd2df9f32e.JPG',
-      'lib/assets/5a0a96ad-cbf9-4902-b997-224a519e285d.JPG',
-      'lib/assets/a9dea6e8-7af5-4411-b49a-1c317124ba8f.JPG',
-      'lib/assets/b470655f-0bec-4670-939e-c203b6d2d4ef.JPG',
+      'lib/assets/candidato1.png',
+      'lib/assets/candidato2.png',
+      'lib/assets/candidato3.png',
+      'lib/assets/candidato4.png',
       /*'lib/assets/logo2.png',
         'lib/assets/logo2.png',
         'lib/assets/logo2.png',

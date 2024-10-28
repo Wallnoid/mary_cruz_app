@@ -1,6 +1,7 @@
 enum SideBar {
-  home,
   candidates,
+  agenda,
+  //home,
   proposals,
   events,
   news,

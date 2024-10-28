@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mary_cruz_app/core/errors/failures.dart';
 
 import '../../../news/models/news_model.dart';
@@ -29,6 +30,7 @@ class _HeartsScoreState extends State<HeartsScore> {
   late int _randomVotes;
 
   Future<void> onSaveNewsVote({required int rate}) async{
+    print('Guardando voto de noticia');
     try{
       String deviceInfo = await getDeviceId();
       final UserModel user = await UsersDataSource().getUserData(idDispositivo: deviceInfo);
@@ -70,6 +72,15 @@ class _HeartsScoreState extends State<HeartsScore> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white, // Cambia el color aquí
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+
+
     _generateRandomRatingAndVotes();
   }
 
@@ -135,15 +146,15 @@ class _HeartsScoreState extends State<HeartsScore> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.secondary,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8), // Reducimos el radio para hacer más pequeño el borde
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12), // Reducimos el padding
-                  minimumSize: Size(80, 32), // Tamaño mínimo más pequeño
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  minimumSize: Size(80, 32),
                 ),
                 onPressed: _showRatingDialog,
                 child: Text(
                   'Calificar',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith( // Reducimos el tamaño de la fuente
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -157,7 +168,7 @@ class _HeartsScoreState extends State<HeartsScore> {
   }
 
   Future<void> _showRatingDialog() async {
-    int tempRating = _randomRating.floor();
+    int tempRating = 0; // Ahora inicializado en 0 para que siempre empiece en 0
     bool _isLoading = false;
     String? _errorMessage;
 
@@ -173,7 +184,6 @@ class _HeartsScoreState extends State<HeartsScore> {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Si hay error, lo mostramos
                   if (_errorMessage != null)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
@@ -182,7 +192,6 @@ class _HeartsScoreState extends State<HeartsScore> {
                         style: TextStyle(color: Colors.red),
                       ),
                     ),
-                  // Mostrar la barra de progreso cuando esté cargando
                   if (_isLoading)
                     const Center(child: CircularProgressIndicator())
                   else
@@ -244,23 +253,21 @@ class _HeartsScoreState extends State<HeartsScore> {
                             ),
                             onPressed: _isLoading ? null : () async {
                               setState(() {
-                                _isLoading = true; // Mostrar la barra de progreso
-                                _errorMessage = null; // Reiniciar el mensaje de error
+                                _isLoading = true;
+                                _errorMessage = null;
                               });
 
                               try {
-                                // Intentar guardar el voto
                                 if (widget.news != null) {
                                   await onSaveNewsVote(rate: tempRating);
                                 } else {
                                   await onSaveProposalVote(rate: tempRating);
                                 }
 
-                                // Si todo sale bien, mostramos mensaje de éxito y cerramos el diálogo
                                 setState(() {
                                   _isLoading = false;
                                 });
-                                Navigator.of(context).pop(); // Cerrar el diálogo
+                                Navigator.of(context).pop();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text('Voto guardado con éxito'), backgroundColor: Theme.of(context).colorScheme.primary)
                                 );
